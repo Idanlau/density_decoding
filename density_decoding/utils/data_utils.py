@@ -67,21 +67,25 @@ class BaseDataLoader():
         """
         
         n_trials = len(trial_start_times)
-        
+
         if valid_trials is None:
             valid_trials = np.arange(n_trials) 
-            
+
         spike_train = np.c_[spike_times, spike_channels, spike_features]
         
         bin_spike_features = []
         bin_trial_idxs, bin_time_idxs = [], []
         for k_idx in tqdm(range(len(valid_trials)), desc="Process spike features"):
-            
+
             k = valid_trials[k_idx]
+            print("valid_trials: ",valid_trials)
+            print("trial_start_times: ",trial_start_times)
+            print("spike_times: ",spike_times)
             mask = np.logical_and(
                 spike_times >= trial_start_times[k],   
                 spike_times <= trial_end_times[k]
             )
+
             sub_spike_train = spike_train[mask]
             sub_spike_train[:,0] = sub_spike_train[:,0] - sub_spike_train[:,0].min()
             t_bin_mask = np.digitize(sub_spike_train[:,0], self.t_binning, right=False).flatten() - 1

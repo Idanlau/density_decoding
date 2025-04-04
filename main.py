@@ -64,7 +64,7 @@ if __name__ == "__main__":
     
     behavior_type = "discrete" if args.behavior == "choice" else "continuous"
     
-    
+    print("args: ",args)
     # -- load data
     ibl_data_loader = IBLDataLoader(
         args.pid, 
@@ -78,10 +78,12 @@ if __name__ == "__main__":
     behavior = ibl_data_loader.process_behaviors(args.behavior)
     
     ephys_path = Path(args.ephys_path)
-    spike_index = np.load(ephys_path / "spike_index.npy")
-    spike_features = np.load(ephys_path / "localization_results.npy")
+    spike_index = np.load(ephys_path/"c4f6665f-8be5-476b-a6e8-d81eeae9279d/spike_index.npy")
+    spike_features = np.load(ephys_path/"c4f6665f-8be5-476b-a6e8-d81eeae9279d/localization_results.npy")
+    print("spike_index.shape: ",spike_index.shape)
+    print("spike_features.shape: ",spike_features.shape)
+
     spike_times, spike_channels = spike_index.T
-    
     bin_spike_features, bin_trial_idxs, bin_time_idxs = \
         ibl_data_loader.load_spike_features(
             spike_times, spike_channels, spike_features, args.brain_region
