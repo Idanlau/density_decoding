@@ -23,6 +23,7 @@ from density_decoding.models.cavi import (
 )
 
 from density_decoding.decoders.behavior_decoder import generic_decoder
+from transformer import train_transformer
 
 seed = 666
 set_seed(seed)
@@ -48,7 +49,8 @@ def decode_pipeline(
     stochastic=True,
     penalty_strength=1000,
     device=torch.device("cpu"),
-    n_workers=4
+    n_workers=4,
+    model_to_use="glm"
 ):
     """Run the decoding pipeline."""
     
@@ -114,14 +116,24 @@ def decode_pipeline(
         if behavior_type == "discrete":
             bin_behaviors = bin_behaviors.reshape(-1,1)
         
-        glm, losses = train_glm(
-            X = init_weight_matrix, 
-            Y = bin_behaviors, 
-            train = train,
-            test = test,
-            learning_rate = 1e-3,
-            n_epochs = 5000
-        )
+        if model_to_use == "glm":
+            glm, losses = train_glm(
+                X = init_weight_matrix, 
+                Y = bin_behaviors, 
+                train = train,
+                test = test,
+                learning_rate = 1e-3,
+                n_epochs = 5000
+            )
+        elif model_to_use == "transformer":
+            glm, losses = train_transformer(
+                X = init_weight_matrix, 
+                Y = bin_behaviors, 
+                train = train,
+                test = test,
+                learning_rate = 1e-3,
+                n_epochs = 5000
+            )
 
         if inference == "advi":
             

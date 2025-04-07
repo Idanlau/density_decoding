@@ -13,7 +13,7 @@ module purge
 singularity exec --nv \
 	    --overlay /scratch/yl9727/neuro_env/overlay-15GB-500K.ext3:ro \
 	    /scratch/work/public/singularity/cuda12.1.1-cudnn8.9.0-devel-ubuntu22.04.2.sif\
-	    /bin/bash -c "source /ext3/env.sh; python main.py --pid c4f6665f-8be5-476b-a6e8-d81eeae9279d --ephys_path ephys_data --out_path output"
+	    /bin/bash -c "source /ext3/env.sh; python main.py --pid 5246af08-0730-40f7-83de-29b5d62b9b6d --ephys_path ephys_data --out_path output"
 
 
 		

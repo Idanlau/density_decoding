@@ -56,6 +56,9 @@ if __name__ == "__main__":
     g.add_argument("--device", default="cpu", type=str, choices=["cpu", "gpu"])
     g.add_argument("--n_workers", default=1, type=int)
     
+    g.add_argument("--model_type", default="glm", type=str)
+
+
     args = ap.parse_args()
     
     
@@ -78,8 +81,8 @@ if __name__ == "__main__":
     behavior = ibl_data_loader.process_behaviors(args.behavior)
     
     ephys_path = Path(args.ephys_path)
-    spike_index = np.load(ephys_path/"c4f6665f-8be5-476b-a6e8-d81eeae9279d/spike_index.npy")
-    spike_features = np.load(ephys_path/"c4f6665f-8be5-476b-a6e8-d81eeae9279d/localization_results.npy")
+    spike_index = np.load(ephys_path/"c4f6665f-8be5-476b-a6e8-d81eeae9279d/spike_index_all.npy")
+    spike_features = np.load(ephys_path/"c4f6665f-8be5-476b-a6e8-d81eeae9279d/localization_results_all.npy")
     print("spike_index.shape: ",spike_index.shape)
     print("spike_features.shape: ",spike_features.shape)
 
@@ -126,7 +129,8 @@ if __name__ == "__main__":
             fast_compute=args.fast_compute,
             stochastic=args.stochastic,
             device=device,
-            n_workers=args.n_workers
+            n_workers=args.n_workers,
+            model_to_use=args.model_type
         )
         
         if np.logical_and(behavior_type == "continuous", args.behavior != "prior"):

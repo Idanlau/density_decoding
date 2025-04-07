@@ -12,7 +12,7 @@ class GLM(torch.nn.Module):
         
     def forward(self, y):
         self.beta = torch.einsum("cr,rt->ct", self.U, self.V)
-        x_pred = self.beta[None,:,:] * y + self.b
+        x_pred = self.beta[None,:,:] *  y + self.b
         return x_pred
     
 def train_glm(
