@@ -91,8 +91,8 @@ if __name__ == "__main__":
     """
 
     ephys_path = Path(args.ephys_path)
-    spike_index = np.load(ephys_path/"spike_index_all.npy")
-    spike_features = np.load(ephys_path/"localization_results_all.npy")
+    spike_index = np.load(ephys_path/f"{args.pid}/spike_index_all.npy")
+    spike_features = np.load(ephys_path/f"{args.pid}/localization_results_all.npy")
     print("spike_index.shape: ",spike_index.shape)
     print("spike_features.shape: ",spike_features.shape)
 

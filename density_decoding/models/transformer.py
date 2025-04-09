@@ -70,6 +70,8 @@ class TransformerModel(nn.Module):
 
 def train_transformer(X, Y, train, test, input_dim=1, d_model=64, nhead=8, num_layers=3, dropout=0.1, learning_rate=1e-3, n_epochs=10000, n_r=2):
     _, n_c, n_t = X.shape
+    print("X.shape: ",X.shape)
+    print("Y.shape: ",Y.shape)
     model = TransformerModel(input_dim=input_dim, n_c=n_c, n_t=n_t, d_model=d_model, 
                              nhead=nhead, num_layers=num_layers, dropout=dropout, n_r=n_r).float()  # ensure model is float32
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)

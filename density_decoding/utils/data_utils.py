@@ -755,7 +755,9 @@ def initialize_weight_matrix(gmm, spike_features):
     n_k = len(spike_features)
     n_t = len(spike_features[0])
     n_c = len(gmm.means_)
-    
+    print("n_k: ",n_k)
+    print("n_t",n_t)
+    print("n_c",n_c)
     weight_matrix = np.zeros((n_k, n_c, n_t))
     for k in tqdm(range(n_k), desc="Initialize weight matrix"):
         for t in range(n_t):
