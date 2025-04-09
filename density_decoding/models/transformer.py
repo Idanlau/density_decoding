@@ -54,43 +54,33 @@ class TransformerModel(nn.Module):
         # GLM-style branch using U, V, and b
         beta = torch.einsum("cr,rt->ct", self.U, self.V)  # [n_c, n_t]
         glm_out = beta.unsqueeze(0) + self.b               # [1, n_c, n_t]
-        
+        # glm_out = beta.unsqueeze(0)
         # Combine both outputs; here, alpha controls the contribution from the transformer branch.
         final_output = self.alpha * transformer_out + (1 - self.alpha) * glm_out
+        # final_output = transformer_out*glm_out + self.b
+
+        print("y.shape: ",y.shape)
+        print("transformer_out.shape: ",transformer_out.shape)
+        print("self.U.shape: ",self.U.shape)
+        print("self.V.shape: ",self.V.shape)
+        print("glm_out.shape: ",glm_out.shape)
+        print("self.alpha.shape: ",self.alpha.shape)
+        print("final output.shape: ",final_output.shape)
         return final_output
 
-def train_transformer(X, Y, train, test, input_dim=1, d_model=64, nhead=8, num_layers=3,
-                      dropout=0.1, learning_rate=1e-3, n_epochs=10000, n_r=2):
-    """
-    Trains the transformer-based model.
-    
-    Args:
-        X: Target data of shape [num_samples, n_c, n_t]
-        Y: Input behavior data of shape [num_samples, n_t] or [num_samples, n_t, input_dim]
-        train: Indices for training samples.
-        test: Indices for testing samples.
-        input_dim: Dimensionality of the behavior input.
-        d_model, nhead, num_layers, dropout: Transformer hyperparameters.
-        learning_rate: Learning rate for the optimizer.
-        n_epochs: Number of training epochs.
-        n_r: Dimensionality for the ADVI priors.
-    
-    Returns:
-        model: Trained transformer model.
-        losses: List of training loss values.
-    """
+def train_transformer(X, Y, train, test, input_dim=1, d_model=64, nhead=8, num_layers=3, dropout=0.1, learning_rate=1e-3, n_epochs=10000, n_r=2):
     _, n_c, n_t = X.shape
     model = TransformerModel(input_dim=input_dim, n_c=n_c, n_t=n_t, d_model=d_model, 
-                             nhead=nhead, num_layers=num_layers, dropout=dropout, n_r=n_r)
+                             nhead=nhead, num_layers=num_layers, dropout=dropout, n_r=n_r).float()  # ensure model is float32
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     criterion = torch.nn.PoissonNLLLoss()
     
     X = torch.tensor(X, dtype=torch.float)
+    Y = torch.tensor(Y, dtype=torch.float)
     if len(Y.shape) == 2:
         Y = Y.unsqueeze(-1)
     elif len(Y.shape) != 3:
         raise ValueError("Unexpected shape for Y")
-    Y = torch.tensor(Y, dtype=torch.float)
     
     train_x, test_x = X[train], X[test]
     train_y, test_y = Y[train], Y[test]

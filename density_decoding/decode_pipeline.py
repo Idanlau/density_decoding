@@ -23,7 +23,7 @@ from density_decoding.models.cavi import (
 )
 
 from density_decoding.decoders.behavior_decoder import generic_decoder
-from transformer import train_transformer
+from density_decoding.models.transformer import train_transformer
 
 seed = 666
 set_seed(seed)

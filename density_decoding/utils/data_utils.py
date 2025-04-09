@@ -78,9 +78,6 @@ class BaseDataLoader():
         for k_idx in tqdm(range(len(valid_trials)), desc="Process spike features"):
 
             k = valid_trials[k_idx]
-            print("valid_trials: ",valid_trials)
-            print("trial_start_times: ",trial_start_times)
-            print("spike_times: ",spike_times)
             mask = np.logical_and(
                 spike_times >= trial_start_times[k],   
                 spike_times <= trial_end_times[k]
