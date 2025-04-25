@@ -39,7 +39,7 @@ class TransformerModel(nn.Module):
         self.b = nn.Parameter(torch.randn(1, n_c, 1))
         
         # Optional: learnable weight to balance transformer vs. GLM branch (or fix a constant weight)
-        self.alpha = nn.Parameter(torch.tensor(0.5))  # alpha in [0,1]
+        # self.alpha = nn.Parameter(torch.tensor(0.5))  # alpha in [0,1]
         
     def forward(self, y):
         # Transformer branch
@@ -53,13 +53,9 @@ class TransformerModel(nn.Module):
         
         # GLM-style branch using U, V, and b
         beta = torch.einsum("cr,rt->ct", self.U, self.V)  # [n_c, n_t]
-        glm_out = beta.unsqueeze(0) + self.b               # [1, n_c, n_t]
-        # glm_out = beta.unsqueeze(0)
-        # Combine both outputs; here, alpha controls the contribution from the transformer branch.
-        final_output = self.alpha * transformer_out + (1 - self.alpha) * glm_out
-        # final_output = transformer_out*glm_out + self.b
+        x_pred = beta[None,:,:] *  transformer_out + self.b
+        return x_pred
 
-        return final_output
 
 def train_transformer(X, Y, train, test, input_dim=1, d_model=64, nhead=8, num_layers=3, dropout=0.1, learning_rate=1e-3, n_epochs=10000, n_r=2):
     _, n_c, n_t = X.shape
