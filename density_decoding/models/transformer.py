@@ -59,19 +59,10 @@ class TransformerModel(nn.Module):
         final_output = self.alpha * transformer_out + (1 - self.alpha) * glm_out
         # final_output = transformer_out*glm_out + self.b
 
-        print("y.shape: ",y.shape)
-        print("transformer_out.shape: ",transformer_out.shape)
-        print("self.U.shape: ",self.U.shape)
-        print("self.V.shape: ",self.V.shape)
-        print("glm_out.shape: ",glm_out.shape)
-        print("self.alpha.shape: ",self.alpha.shape)
-        print("final output.shape: ",final_output.shape)
         return final_output
 
 def train_transformer(X, Y, train, test, input_dim=1, d_model=64, nhead=8, num_layers=3, dropout=0.1, learning_rate=1e-3, n_epochs=10000, n_r=2):
     _, n_c, n_t = X.shape
-    print("X.shape: ",X.shape)
-    print("Y.shape: ",Y.shape)
     model = TransformerModel(input_dim=input_dim, n_c=n_c, n_t=n_t, d_model=d_model, 
                              nhead=nhead, num_layers=num_layers, dropout=dropout, n_r=n_r).float()  # ensure model is float32
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
