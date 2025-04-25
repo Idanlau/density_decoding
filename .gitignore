@@ -1,3 +1,8 @@
+# ML Related
+*.pth
+events.out.tfevents*
+*.npy
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

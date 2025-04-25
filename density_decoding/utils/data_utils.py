@@ -450,6 +450,43 @@ class IBLDataLoader(BaseDataLoader):
         
         return bin_spike_features, bin_trial_idxs, bin_time_idxs
     
+    def load_spike_feats_trial(
+        self,
+        spike_times,
+        spike_channels,
+        spike_features,
+        region="all",
+    ):
+        spike_times = self.sl.samples2times(spike_times)
+        unsorted = np.c_[spike_times, spike_channels, spike_features]
+        
+        if region != 'all':
+            unsorted = self._partition_brain_regions(
+                unsorted, region, self.channels, "channels"
+            )
+        
+        spike_times = unsorted[:,0]
+        spike_channels = unsorted[:,1]
+        spike_features = unsorted[:,2:]
+        
+        trial_start_times = self.stim_on_times - self.t_after
+        trial_end_times = self.stim_on_times + self.t_before
+        
+        spike_train = np.c_[spike_times, spike_channels, spike_features]
+        
+        spike_features = []
+        trial_idxs = []
+        for k in tqdm(range(len(self.stim_on_times)), desc="Process spike features (whole trial)"):
+            mask = np.logical_and(
+                spike_times >= trial_start_times[k],   
+                spike_times <= trial_end_times[k]
+            )
+            sub_spike_train = spike_train[mask]
+            sub_spike_train[:,0] = sub_spike_train[:,0] - sub_spike_train[:,0].min()
+            spike_features.append(sub_spike_train[:, 1:])
+            trial_idxs.append(np.ones_like(sub_spike_train.T[0] * k))
+        return spike_features, trial_idxs
+        
     
     def compute_spike_count_matrix(
         self, 
