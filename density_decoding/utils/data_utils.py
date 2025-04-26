@@ -475,6 +475,7 @@ class IBLDataLoader(BaseDataLoader):
         spike_train = np.c_[spike_times, spike_channels, spike_features]
         
         spike_features = []
+        trial_spike_times = []
         trial_idxs = []
         for k in tqdm(range(len(self.stim_on_times)), desc="Process spike features (whole trial)"):
             mask = np.logical_and(
@@ -483,9 +484,10 @@ class IBLDataLoader(BaseDataLoader):
             )
             sub_spike_train = spike_train[mask]
             sub_spike_train[:,0] = sub_spike_train[:,0] - sub_spike_train[:,0].min()
-            spike_features.append(sub_spike_train[:, 1:])
+            spike_features.append(sub_spike_train[:, 2:])
+            trial_spike_times.append(spike_times[mask])
             trial_idxs.append(np.ones_like(sub_spike_train.T[0] * k))
-        return spike_features, trial_idxs
+        return spike_features, trial_spike_times, trial_idxs
         
     
     def compute_spike_count_matrix(
