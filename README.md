@@ -2,7 +2,7 @@
 This project consists of two customized paper codebases and two stand-alone jupyter notebooks, corresponding to different methods developed to address the problem of decoding behaviour from neural recordings.
 
 ### Code Organization of Various Methods
-**Note that this README is not on the main branch, but rather the pointcloud branch
+\*\*Note that you are currently on the pointcloud branch, and **not** the main branch. The PDF report accompanying the finetuned results is on the main branch titled as `Clusterless_Decoding_paper_FineTuned.pdf`.
 | Report Section # (Method) | Location | Files Involved | Entry Point |
 |---|---|---|---|
 | Sec. 6.1 (Improved GMM) | main branch | whole repository, except for report pdf and `TemporalLFP_Transformer...ipynb` | `main.py` |
