@@ -2,13 +2,13 @@
 This project consists of two customized paper codebases and two stand-alone jupyter notebooks, corresponding to different methods developed to address the problem of decoding behaviour from neural recordings.
 
 ### Code Organization of Various Methods
-
+**Note that this README is not on the main branch, but rather the pointcloud branch
 | Report Section # (Method) | Location | Files Involved | Entry Point |
 |---|---|---|---|
 | Sec. 6.1 (Improved GMM) | main branch | whole repository, except for report pdf and `TemporalLFP_Transformer...ipynb` | `main.py` |
 | Sec. 6.2 (LFP Movement Threshold) | pointcloud branch | `Transformer_Variable_Labelling.ipynb` | Jupyter Notebook |
 | Sec. 6.3 (Point Transformer) | pointcloud branch | The `DAPT` submodule, `main_pointcloud.ipynb`, and `density_decoding/utils/data_utils.py` | `main_pointcloud.ipynb` |
-| Sec. 6.4 (Raw Signal Features) | main branch | `TemporalLFP_Transformer_FullPipeline(Schohastic_and_Statistics).ipynb` | Jupyter Notebook |
+| Sec. 6.4 (Statistical LFP Features) | main branch | `TemporalLFP_Transformer_FullPipeline(Schohastic_and_Statistics).ipynb` | Jupyter Notebook |
 
 ### Dependencies
 
